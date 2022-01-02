@@ -9,7 +9,20 @@ repositories {
 
 dependencies {
     implementation 'org.junit.jupiter:junit-jupiter:5.4.2'
-    implementation 'org.projectlombok:lombok:1.18.16'
+
+    compileOnly 'org.projectlombok:lombok:1.18.22'
+    annotationProcessor 'org.projectlombok:lombok:1.18.22'
+
+    testCompileOnly 'org.projectlombok:lombok:1.18.22'
+    testAnnotationProcessor 'org.projectlombok:lombok:1.18.22'
+
+    implementation("com.google.guava:guava:31.0.1-jre")
+
+    testCompile("org.mockito:mockito-core:4.1.0")
+    testCompile("org.mockito:mockito-junit-jupiter:2.18.0")
+    testCompile("org.assertj:assertj-core:3.11.1")
+
+
 }
 
 test {
