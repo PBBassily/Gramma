@@ -1,6 +1,17 @@
 package com.pbbassily.codingtask.grammaproject.job;
 
-public interface Job {
+import lombok.Getter;
 
-    public void execute(JobContext context) ;
+import java.util.UUID;
+
+@Getter
+public abstract class Job {
+
+    private final String name;
+
+    public Job(String name) {
+        this.name = name + "-" + UUID.randomUUID().toString();;
+    }
+
+    public abstract void execute(JobContext context) ;
 }

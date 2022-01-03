@@ -1,4 +1,4 @@
-package com.pbbassily.codingtask.grammaproject.trigger;
+package com.pbbassily.codingtask.grammaproject.time;
 
 import lombok.Builder;
 
@@ -6,7 +6,7 @@ import lombok.Builder;
 public class GrammaTime {
 
     private final int value;
-    private final TriggerFrequencyUnit unit;
+    private final GrammaTimeUnit unit;
 
 
     public long getValueInMillis() {
@@ -24,7 +24,7 @@ public class GrammaTime {
         }
     }
 
-     public enum TriggerFrequencyUnit {
+     public enum GrammaTimeUnit {
         SECOND,
         MINUTE,
         HOUR,
@@ -32,9 +32,9 @@ public class GrammaTime {
         WEEK,
     }
 
-    public static class TriggerFrequencyBuilder {
+    public static class GrammaTimeBuilder {
 
-        public GrammaTime.TriggerFrequencyBuilder value(int value) {
+        public GrammaTime.GrammaTimeBuilder value(int value) {
 
             if (value <= 0)
                 throw new IllegalArgumentException("Frequency can not be less than or equal zero!");

@@ -1,6 +1,7 @@
 package com.pbbassily.codingtask.grammaproject.trigger;
 
 import com.pbbassily.codingtask.grammaproject.job.Job;
+import com.pbbassily.codingtask.grammaproject.time.GrammaTime;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -13,7 +14,7 @@ import java.util.concurrent.TimeUnit;
 public class Trigger {
 
     private TriggerBaseTime baseTime;
-    private final TriggerFrequency frequency;
+    private final GrammaTime frequency;
     private final List<Job> jobsToBeExecuted;
 
     protected long getNextFireUpTimeStamp() {

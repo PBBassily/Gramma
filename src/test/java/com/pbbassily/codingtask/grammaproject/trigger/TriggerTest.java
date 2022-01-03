@@ -1,6 +1,8 @@
 package com.pbbassily.codingtask.grammaproject.trigger;
 
 import com.pbbassily.codingtask.grammaproject.job.Job;
+
+import com.pbbassily.codingtask.grammaproject.time.GrammaTime;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -18,7 +20,7 @@ public class TriggerTest {
     @Mock
     private List<Job> jobs;
     @Mock
-    private TriggerFrequency frequency;
+    private GrammaTime frequency;
 
     @BeforeEach
     public void setup() {
