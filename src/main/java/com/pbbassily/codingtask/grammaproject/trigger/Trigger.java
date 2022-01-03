@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 
 @Builder
@@ -18,7 +19,8 @@ public class Trigger {
     private final List<Job> jobsToBeExecuted;
 
     protected long getNextFireUpTimeStamp() {
-        return baseTimestamp +  (frequency * 1000);
+        long factor = TimeUnit.SECONDS.toMillis(1);
+        return ((baseTimestamp / factor)  +  frequency ) * factor;
     }
 
     protected void updateBaseTime(long timeNow) {

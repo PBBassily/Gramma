@@ -11,7 +11,9 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -174,5 +176,27 @@ public class TriggersTrackerTest {
         verify(spy, never()).updateNextEpocToWaitingTriggersMap(anyLong());
 
         verify(trigger1, never()).updateBaseTime(10L);
+    }
+
+    @Test
+    public void test_getFiredTriggers_WHEN_matched_awaits_THEN_check_new_state() {
+        Mockito.when(trigger1.getNextFireUpTimeStamp()).thenReturn(10L);
+        Mockito.when(trigger2.getNextFireUpTimeStamp()).thenReturn(20L);
+        Mockito.when(trigger1.getJobsToBeExecuted()).thenReturn(ImmutableList.of(job1));
+
+        spy.addTrigger(trigger1);
+        spy.addTrigger(trigger2);
+
+        // mock its next fireUp time matches the 2nd trigger
+        Mockito.when(trigger1.getNextFireUpTimeStamp()).thenReturn(20L);
+        Optional<List<Job>> jobsAt10 = spy.getFiredTriggers(10L);
+        assertTrue(jobsAt10.isPresent());
+        assertThat(ImmutableList.of(job1)).hasSameElementsAs(jobsAt10.get());
+        verify(spy).updateNextEpocToWaitingTriggersMap(anyLong());
+
+        Map<Long, Set<Trigger>> triggers = underTest.getNextEpocToWaitingTriggersMap();
+        assertEquals(1, triggers.size());
+        assertTrue(triggers.get(20L).contains(trigger1));
+        assertTrue(triggers.get(20L).contains(trigger2));
     }
 }

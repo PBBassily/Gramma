@@ -6,6 +6,6 @@ import com.pbbassily.codingtask.grammaproject.job.JobContext;
 public class DemoJob implements Job {
     @Override
     public void execute(JobContext context) {
-        System.out.println("Hey it is my job" + context.getData());
+        System.out.println("Hey it is my job with context: " + context.getData());
     }
 }
