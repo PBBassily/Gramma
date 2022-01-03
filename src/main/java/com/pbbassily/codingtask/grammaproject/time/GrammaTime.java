@@ -3,7 +3,7 @@ package com.pbbassily.codingtask.grammaproject.trigger;
 import lombok.Builder;
 
 @Builder
-public class TriggerFrequency {
+public class GrammaTime {
 
     private final int value;
     private final TriggerFrequencyUnit unit;
@@ -34,7 +34,7 @@ public class TriggerFrequency {
 
     public static class TriggerFrequencyBuilder {
 
-        public TriggerFrequency.TriggerFrequencyBuilder value(int value) {
+        public GrammaTime.TriggerFrequencyBuilder value(int value) {
 
             if (value <= 0)
                 throw new IllegalArgumentException("Frequency can not be less than or equal zero!");
