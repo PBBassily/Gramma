@@ -1,25 +1,36 @@
 package com.pbbassily.codingtask.grammaproject.trigger;
 
 import com.pbbassily.codingtask.grammaproject.job.Job;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.when;
 
+@ExtendWith(MockitoExtension.class)
 public class TriggerTest {
     private Trigger underTest;
     @Mock
     private List<Job> jobs;
+    @Mock
+    private TriggerFrequency frequency;
+
+    @BeforeEach
+    public void setup() {
+        when(frequency.getValueInMillis()).thenReturn(1000L);
+    }
 
     @Test
     public void test_getNextFireUpTimeStamp_THEN_return_correct_value() {
         underTest = Trigger
                 .builder()
-                .baseTimestamp(10000L)
-                .frequency(1)
+                .baseTime(new TriggerBaseTime(10_000L))
+                .frequency(frequency)
                 .jobsToBeExecuted(jobs)
                 .build();
         assertEquals(11000L, underTest.getNextFireUpTimeStamp());
@@ -29,8 +40,8 @@ public class TriggerTest {
     public void test_getNextFireUpTimeStamp_WHEN_updating_base_time_THEN_return_correct_value() {
         underTest = Trigger
                 .builder()
-                .baseTimestamp(10000L)
-                .frequency(1)
+                .baseTime(new TriggerBaseTime(10_000L))
+                .frequency(frequency)
                 .jobsToBeExecuted(jobs)
                 .build();
         assertEquals(11000L, underTest.getNextFireUpTimeStamp());
@@ -43,20 +54,5 @@ public class TriggerTest {
 
         underTest.updateBaseTime(13000L);
         assertEquals(14000L, underTest.getNextFireUpTimeStamp());
-    }
-
-    @Test
-    public void test_buildTrigger_WHEN_frequency_is_wrong_THEN_throw_exception() {
-
-        assertThrows(IllegalArgumentException.class, () -> Trigger.builder()
-                    .baseTimestamp(10000L)
-                    .frequency(-1)
-                    .jobsToBeExecuted(jobs)
-                    .build());
-        assertThrows(IllegalArgumentException.class, () -> Trigger.builder()
-                .baseTimestamp(10000L)
-                .frequency(0)
-                .jobsToBeExecuted(jobs)
-                .build());
     }
 }
