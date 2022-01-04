@@ -2,6 +2,7 @@ package com.pbbassily.codingtask.grammaproject.scheduler;
 
 import com.pbbassily.codingtask.grammaproject.job.Job;
 import com.pbbassily.codingtask.grammaproject.job.JobContext;
+import com.pbbassily.codingtask.grammaproject.job.JobExecutor;
 import com.pbbassily.codingtask.grammaproject.time.GrammaTime;
 import com.pbbassily.codingtask.grammaproject.time.IntervalGuardian;
 import com.pbbassily.codingtask.grammaproject.trigger.Trigger;
@@ -43,9 +44,9 @@ public class GrammaScheduler {
                 long parsedTime = parseTimeNow();
                 Optional<List<Job>> jobs = triggersTracker.getFiredTriggers(parsedTime);
                 jobs.ifPresent(presentJobs -> presentJobs.forEach(job -> promoteJobToExecution(job)));
+                checkClosure();
             }
         }, 0, epocTime.getValueInMillis());
-        checkClosure();
     }
 
     public void stop() {
@@ -59,7 +60,9 @@ public class GrammaScheduler {
     }
 
     private void promoteJobToExecution(Job job) {
-        executor.submit(() -> job.execute(new JobContext("Thread:" + Thread.currentThread().getId())));
+        executor.submit(() -> {
+            JobExecutor.execute(job, new JobContext("Thread:" + Thread.currentThread().getId()));
+        });
     }
 
     private void checkClosure() {

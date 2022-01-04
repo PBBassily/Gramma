@@ -11,5 +11,11 @@ public class DemoJob extends Job {
     @Override
     public void execute(JobContext context) {
         System.out.println("[" + this.getName() + "]: Hey it is my job with context: " + context.getData());
+
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 }

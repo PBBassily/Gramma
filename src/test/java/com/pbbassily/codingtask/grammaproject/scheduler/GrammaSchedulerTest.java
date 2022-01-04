@@ -1,7 +1,5 @@
 package com.pbbassily.codingtask.grammaproject.scheduler;
 
-import com.google.common.collect.ImmutableList;
-import com.pbbassily.codingtask.grammaproject.job.Job;
 import com.pbbassily.codingtask.grammaproject.time.GrammaTime;
 import com.pbbassily.codingtask.grammaproject.time.IntervalGuardian;
 import com.pbbassily.codingtask.grammaproject.trigger.Trigger;
