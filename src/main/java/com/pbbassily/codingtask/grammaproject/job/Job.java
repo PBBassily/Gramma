@@ -10,8 +10,8 @@ public abstract class Job {
     private final String name;
 
     public Job(String name) {
-        this.name = name + "-" + UUID.randomUUID().toString();;
+        this.name = name + "-" + UUID.randomUUID().toString();
     }
 
-    public abstract void execute(JobContext context) ;
+    public abstract void execute(JobContext context);
 }

@@ -3,6 +3,7 @@ package com.pbbassily.codingtask.demo;
 import com.google.common.collect.ImmutableList;
 import com.pbbassily.codingtask.grammaproject.job.Job;
 import com.pbbassily.codingtask.grammaproject.scheduler.GrammaScheduler;
+import com.pbbassily.codingtask.grammaproject.scheduler.GrammaSchedulerContext;
 import com.pbbassily.codingtask.grammaproject.time.GrammaTime;
 import com.pbbassily.codingtask.grammaproject.trigger.Trigger;
 import com.pbbassily.codingtask.grammaproject.trigger.TriggerBaseTime;
@@ -18,7 +19,7 @@ public class DemoMain {
                 .unit(GrammaTime.GrammaTimeUnit.MINUTE)
                 .build();
 
-        GrammaScheduler scheduler =  new GrammaScheduler(GrammaScheduler.DEFAULT_FIXED_POOL_THREAD_NUMBER, executionTime);
+        GrammaScheduler scheduler =  new GrammaScheduler(GrammaSchedulerContext.getDefaultInstance(executionTime));
         Job job1 = new DemoJob("Job1");
 
         GrammaTime freq = GrammaTime

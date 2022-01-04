@@ -3,6 +3,7 @@ package com.pbbassily.codingtask.grammaproject.scheduler;
 import com.pbbassily.codingtask.grammaproject.job.Job;
 import com.pbbassily.codingtask.grammaproject.job.JobContext;
 import com.pbbassily.codingtask.grammaproject.time.GrammaTime;
+import com.pbbassily.codingtask.grammaproject.time.IntervalGuardian;
 import com.pbbassily.codingtask.grammaproject.trigger.Trigger;
 import com.pbbassily.codingtask.grammaproject.trigger.TriggersTracker;
 import lombok.NonNull;
@@ -19,23 +20,16 @@ public class GrammaScheduler {
 
     @NonNull private final TriggersTracker triggersTracker;
     @NonNull private final Timer timer;
-    @NonNull private final GrammaTime time;
+    @NonNull private final IntervalGuardian intervalGuardian;
     @NonNull private final ExecutorService executor;
+    @NonNull private final GrammaTime epocTime;
 
-    private long initiatedTime;
-    private final GrammaTime EPOC_TIME = GrammaTime
-            .builder()
-            .value(1)
-            .unit(GrammaTime.GrammaTimeUnit.SECOND)
-            .build();
-
-    public static final int DEFAULT_FIXED_POOL_THREAD_NUMBER = 10;
-
-    public GrammaScheduler(int numberOfThreads, GrammaTime time) {
-        this.timer = new Timer();
-        this.triggersTracker = new TriggersTracker();
-        this.executor = Executors.newFixedThreadPool(numberOfThreads);
-        this.time = time;
+    public GrammaScheduler(GrammaSchedulerContext grammaSchedulerContext) {
+        this.timer = grammaSchedulerContext.getTimer();
+        this.triggersTracker = grammaSchedulerContext.getTriggersTracker();
+        this.executor = Executors.newFixedThreadPool(grammaSchedulerContext.getNThreads());
+        this.intervalGuardian = grammaSchedulerContext.getIntervalGuardian();
+        this.epocTime = grammaSchedulerContext.getEpocTime();
     }
 
     public void registerTrigger(Trigger trigger) {
@@ -43,7 +37,7 @@ public class GrammaScheduler {
     }
 
     public void start() {
-        this.initiatedTime = System.currentTimeMillis();
+        intervalGuardian.setInitialTimestamp(System.currentTimeMillis());
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
@@ -52,7 +46,7 @@ public class GrammaScheduler {
                 jobs.ifPresent(presentJobs -> presentJobs.forEach(job -> promoteJobToExecution(job)));
                 checkClosure();
             }
-        }, 0, EPOC_TIME.getValueInMillis());
+        }, 0, epocTime.getValueInMillis());
     }
 
     public void stop() {
@@ -71,7 +65,7 @@ public class GrammaScheduler {
 
     private void checkClosure() {
         long currentTime = System.currentTimeMillis();
-        if (currentTime - initiatedTime >= time.getValueInMillis()) {
+        if (intervalGuardian.isIntervalElapsed(currentTime)) {
             stop();
         }
     }
