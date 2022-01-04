@@ -13,7 +13,6 @@ import java.util.Optional;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
 public class GrammaScheduler {
@@ -27,7 +26,7 @@ public class GrammaScheduler {
     public GrammaScheduler(GrammaSchedulerContext grammaSchedulerContext) {
         this.timer = grammaSchedulerContext.getTimer();
         this.triggersTracker = grammaSchedulerContext.getTriggersTracker();
-        this.executor = Executors.newFixedThreadPool(grammaSchedulerContext.getNThreads());
+        this.executor = grammaSchedulerContext.getExecutorService();
         this.intervalGuardian = grammaSchedulerContext.getIntervalGuardian();
         this.epocTime = grammaSchedulerContext.getEpocTime();
     }
@@ -44,9 +43,9 @@ public class GrammaScheduler {
                 long parsedTime = parseTimeNow();
                 Optional<List<Job>> jobs = triggersTracker.getFiredTriggers(parsedTime);
                 jobs.ifPresent(presentJobs -> presentJobs.forEach(job -> promoteJobToExecution(job)));
-                checkClosure();
             }
         }, 0, epocTime.getValueInMillis());
+        checkClosure();
     }
 
     public void stop() {

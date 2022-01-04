@@ -7,6 +7,8 @@ import lombok.Getter;
 import lombok.NonNull;
 
 import java.util.Timer;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 @Getter
 public class GrammaSchedulerContext {
@@ -23,7 +25,7 @@ public class GrammaSchedulerContext {
     @NonNull private final Timer timer;
     @NonNull private final IntervalGuardian intervalGuardian;
     @NonNull private final GrammaTime epocTime;
-    @NonNull private final Integer nThreads;
+    @NonNull private final ExecutorService executorService;
 
     protected GrammaSchedulerContext(TriggersTracker triggersTracker,
                                      Timer timer,
@@ -33,14 +35,18 @@ public class GrammaSchedulerContext {
         this.triggersTracker = triggersTracker;
         this.timer = timer;
         this.intervalGuardian =  intervalGuardian;
-        this.nThreads = nThreads;
+        this.executorService = Executors.newFixedThreadPool(nThreads);
         this.epocTime = epocTime;
-
     }
 
     public static GrammaSchedulerContext getDefaultInstance(GrammaTime executionTime) {
          new IntervalGuardian(executionTime);
+        return getDefaultInstance(executionTime, DEFAULT_FIXED_POOL_THREAD_NUMBER);
+    }
+
+    public static GrammaSchedulerContext getDefaultInstance(GrammaTime executionTime, int nThreads) {
+        new IntervalGuardian(executionTime);
         return new GrammaSchedulerContext(new TriggersTracker(), new Timer(),
-                new IntervalGuardian(executionTime), EPOC_TIME, DEFAULT_FIXED_POOL_THREAD_NUMBER);
+                new IntervalGuardian(executionTime), EPOC_TIME, nThreads);
     }
 }
