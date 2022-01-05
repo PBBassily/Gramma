@@ -77,8 +77,11 @@ public class DemoMain {
                 .jobsToBeExecuted(ImmutableList.of(job2))
                 .build();
 
-        scheduler.registerTrigger(trigger2);
+        // register triggers
         scheduler.registerTrigger(trigger);
+        scheduler.registerTrigger(trigger2);
+
+        // kick off scheduler!
         scheduler.start();
     }
 }
