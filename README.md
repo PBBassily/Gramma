@@ -27,14 +27,14 @@ Since Jobs are atomic, having one thread may block the scheduler from executing 
 
 ### Usage
 
-- First of all create your `AwesomeJob` implementing `Job` interface.
+- First of all create your `DemoJob` implementing `Job` interface.
 ````
 public class DemoJob extends Job {
       ...
 }
 ````
 
-- Implement `execute` method to do your define the functionality of your job.
+- Implement `execute` method to define the functionality of your job.
 ````
  @Override
     public void execute(JobContext context) { 
