@@ -86,3 +86,4 @@ PS: trigger can have many jobs, but a job has one trigger
 - Unit test all the classes.
 - Provide client control over whether the job is executed after the base-time or after the base-time + 1 frequency period.
 - Support metrics to monitor the scheduler sanity at client-side. 
+- Usage of Guice for better dependency injection & testability.
