@@ -26,6 +26,23 @@ Since Jobs are atomic, having one thread may block the scheduler from executing 
  
 
 ### Usage
+
+- First of all create your `AwesomeJob` implementing `Job` interface.
+````
+public class DemoJob extends Job {
+      ...
+}
+````
+
+- Implement `execute` method to do your define the functionality of your job.
+````
+ @Override
+    public void execute(JobContext context) { 
+     
+       // TODO awesome stuff
+    }
+````
+
 - Define the execution interval to be e.g. 2 minutes
 ````
         GrammaTime executionTime = GrammaTime
