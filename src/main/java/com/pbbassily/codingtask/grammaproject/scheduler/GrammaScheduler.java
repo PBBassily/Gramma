@@ -53,6 +53,7 @@ public class GrammaScheduler {
                 checkClosure();
             }
         }, 0, cycleTime.getValueInMillis());
+        checkClosure();
     }
 
     public void stop() {

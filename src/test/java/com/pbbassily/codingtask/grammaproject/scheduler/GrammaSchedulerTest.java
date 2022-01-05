@@ -49,7 +49,7 @@ public class GrammaSchedulerTest {
 
     @BeforeEach
     public void setup() {
-        when(context.getEpocTime()).thenReturn(epocTime);
+        when(context.getCycleTime()).thenReturn(epocTime);
         when(context.getTimer()).thenReturn(timer);
         when(context.getTriggersTracker()).thenReturn(triggersTracker);
         when(context.getIntervalGuardian()).thenReturn(intervalGuardian);
