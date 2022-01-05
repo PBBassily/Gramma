@@ -15,7 +15,7 @@ public class GrammaSchedulerContext {
 
     public static final int DEFAULT_FIXED_POOL_THREAD_NUMBER = 10;
 
-    private static final GrammaTime EPOC_TIME = GrammaTime
+    private static final GrammaTime CYCLE_TIME = GrammaTime
             .builder()
             .value(1)
             .unit(GrammaTime.GrammaTimeUnit.SECOND)
@@ -24,19 +24,19 @@ public class GrammaSchedulerContext {
     @NonNull private final TriggersTracker triggersTracker;
     @NonNull private final Timer timer;
     @NonNull private final IntervalGuardian intervalGuardian;
-    @NonNull private final GrammaTime epocTime;
+    @NonNull private final GrammaTime cycleTime;
     @NonNull private final ExecutorService executorService;
 
     protected GrammaSchedulerContext(TriggersTracker triggersTracker,
                                      Timer timer,
                                      IntervalGuardian intervalGuardian,
-                                     GrammaTime epocTime,
+                                     GrammaTime cycleTime,
                                      int nThreads) {
         this.triggersTracker = triggersTracker;
         this.timer = timer;
         this.intervalGuardian =  intervalGuardian;
         this.executorService = Executors.newFixedThreadPool(nThreads);
-        this.epocTime = epocTime;
+        this.cycleTime = cycleTime;
     }
 
     public static GrammaSchedulerContext getDefaultInstance(GrammaTime executionTime) {
@@ -47,6 +47,6 @@ public class GrammaSchedulerContext {
     public static GrammaSchedulerContext getDefaultInstance(GrammaTime executionTime, int nThreads) {
         new IntervalGuardian(executionTime);
         return new GrammaSchedulerContext(new TriggersTracker(), new Timer(),
-                new IntervalGuardian(executionTime), EPOC_TIME, nThreads);
+                new IntervalGuardian(executionTime), CYCLE_TIME, nThreads);
     }
 }

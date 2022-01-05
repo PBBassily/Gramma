@@ -15,7 +15,6 @@ public class DemoMain {
 
     public static void main (String[] args) {
 
-
         // define the execution interval to be e.g. 2 minutes
         GrammaTime executionTime = GrammaTime
                 .builder()
@@ -37,7 +36,7 @@ public class DemoMain {
                 .build();
 
         // define base time i.e constant time to defined ahead of the first execution of your job
-        // example: after 1 hr (base time), call my job every minute (freq)
+        // example: after 1 min 32 sec (base time), call my job every sec (freq)
         TriggerBaseTime triggerBaseTime = TriggerBaseTime.now();
 
         // define the trigger which will relate freq, basetime and job(s) to be executed.

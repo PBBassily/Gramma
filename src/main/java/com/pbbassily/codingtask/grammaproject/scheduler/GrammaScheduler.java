@@ -24,7 +24,7 @@ public class GrammaScheduler {
     @NonNull private final Timer timer;
     @NonNull private final IntervalGuardian intervalGuardian;
     @NonNull private final ExecutorService executor;
-    @NonNull private final GrammaTime epocTime;
+    @NonNull private final GrammaTime cycleTime;
 
     private final static Logger logger = LogManager.getLogger(GrammaScheduler.class);
 
@@ -33,7 +33,7 @@ public class GrammaScheduler {
         this.triggersTracker = grammaSchedulerContext.getTriggersTracker();
         this.executor = grammaSchedulerContext.getExecutorService();
         this.intervalGuardian = grammaSchedulerContext.getIntervalGuardian();
-        this.epocTime = grammaSchedulerContext.getEpocTime();
+        this.cycleTime = grammaSchedulerContext.getCycleTime();
     }
 
     public void registerTrigger(Trigger trigger) {
@@ -52,7 +52,7 @@ public class GrammaScheduler {
                 jobs.ifPresent(presentJobs -> presentJobs.forEach(job -> promoteJobToExecution(job)));
                 checkClosure();
             }
-        }, 0, epocTime.getValueInMillis());
+        }, 0, cycleTime.getValueInMillis());
     }
 
     public void stop() {
