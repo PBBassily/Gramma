@@ -16,6 +16,7 @@ public class Trigger {
     private TriggerBaseTime baseTime;
     private final GrammaTime frequency;
     private final List<Job> jobsToBeExecuted;
+    private final String name;
 
     protected long getNextFireUpTimeStamp() {
         long factor = TimeUnit.SECONDS.toMillis(1);

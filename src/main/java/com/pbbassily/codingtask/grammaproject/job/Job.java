@@ -1,5 +1,6 @@
 package com.pbbassily.codingtask.grammaproject.job;
 
+import com.pbbassily.codingtask.grammaproject.exceptions.FailedExecutionException;
 import lombok.Getter;
 
 import java.util.UUID;
@@ -13,5 +14,5 @@ public abstract class Job {
         this.name = name + "-" + UUID.randomUUID().toString();
     }
 
-    public abstract void execute(JobContext context);
+    public abstract void execute(JobContext context) throws FailedExecutionException;
 }

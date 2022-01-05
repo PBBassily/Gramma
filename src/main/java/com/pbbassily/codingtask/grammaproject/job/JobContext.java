@@ -7,5 +7,5 @@ import lombok.Getter;
 @Getter
 public class JobContext {
 
-    private String data;
+    private final String data;
 }

@@ -2,6 +2,8 @@ package com.pbbassily.codingtask.grammaproject.trigger;
 
 import com.google.common.annotations.VisibleForTesting;
 import com.pbbassily.codingtask.grammaproject.job.Job;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -15,9 +17,11 @@ import java.util.stream.Collectors;
 public class TriggersTracker {
 
     private final Map<Long, Set<Trigger>> nextEpocToWaitingTriggersMap = new HashMap<>();
+    private final static Logger logger = LogManager.getLogger(TriggersTracker.class);
 
     public void addTrigger(Trigger trigger) {
         long theAwaitedTimeStamp = trigger.getNextFireUpTimeStamp();
+        logger.debug("\n" + trigger.getName()+ " scheduled at: "+ theAwaitedTimeStamp);
         Set<Trigger> triggers;
         if (nextEpocToWaitingTriggersMap.containsKey(theAwaitedTimeStamp)) {
             triggers = nextEpocToWaitingTriggersMap.get(theAwaitedTimeStamp);
@@ -31,6 +35,7 @@ public class TriggersTracker {
     public Optional<List<Job>> getFiredTriggers(long timeNow) {
         if (nextEpocToWaitingTriggersMap.containsKey(timeNow)) {
             Set<Trigger> triggers = nextEpocToWaitingTriggersMap.get(timeNow);
+            logger.debug("\n" + triggers.size()+ " Triggers fired!");
             triggers.forEach(trigger -> trigger.updateBaseTime(timeNow));
             updateNextEpocToWaitingTriggersMap(timeNow);
             return Optional.of(

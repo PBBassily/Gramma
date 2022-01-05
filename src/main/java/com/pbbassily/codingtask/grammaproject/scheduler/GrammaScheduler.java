@@ -8,6 +8,8 @@ import com.pbbassily.codingtask.grammaproject.time.IntervalGuardian;
 import com.pbbassily.codingtask.grammaproject.trigger.Trigger;
 import com.pbbassily.codingtask.grammaproject.trigger.TriggersTracker;
 import lombok.NonNull;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.List;
 import java.util.Optional;
@@ -24,6 +26,8 @@ public class GrammaScheduler {
     @NonNull private final ExecutorService executor;
     @NonNull private final GrammaTime epocTime;
 
+    private final static Logger logger = LogManager.getLogger(GrammaScheduler.class);
+
     public GrammaScheduler(GrammaSchedulerContext grammaSchedulerContext) {
         this.timer = grammaSchedulerContext.getTimer();
         this.triggersTracker = grammaSchedulerContext.getTriggersTracker();
@@ -34,9 +38,11 @@ public class GrammaScheduler {
 
     public void registerTrigger(Trigger trigger) {
         triggersTracker.addTrigger(trigger);
+        logger.debug("\n"+ trigger.getName()+" Trigger registered to be tracked");
     }
 
     public void start() {
+        logger.info("\nScheduler started");
         intervalGuardian.setInitialTimestamp(System.currentTimeMillis());
         timer.schedule(new TimerTask() {
             @Override
@@ -52,6 +58,7 @@ public class GrammaScheduler {
     public void stop() {
         this.timer.cancel();
         this.executor.shutdown();
+        logger.info("\nScheduler stopped");
     }
 
     private long parseTimeNow() {
@@ -60,9 +67,8 @@ public class GrammaScheduler {
     }
 
     private void promoteJobToExecution(Job job) {
-        executor.submit(() -> {
-            JobExecutor.execute(job, new JobContext("Thread:" + Thread.currentThread().getId()));
-        });
+        executor.submit(() ->
+                JobExecutor.execute(job, new JobContext("Thread:" + Thread.currentThread().getId())));
     }
 
     private void checkClosure() {
