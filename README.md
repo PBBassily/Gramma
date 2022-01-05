@@ -51,7 +51,7 @@ Since Jobs are atomic, having one thread may block the scheduler from executing 
                 .unit(GrammaTime.GrammaTimeUnit.SECOND)
                 .build();
 ````
-- Define base time i.e constant time to defined ahead of the first execution of your job. Example: after 1 min 32 sec (base time), call my job every sec (freq)
+- Define base time i.e constant time to be defined ahead of the first execution of your job. Example: after 1 min 32 sec (base time), call my job every sec (freq)
 ````
         TriggerBaseTime triggerBaseTime = TriggerBaseTime
                         .builder()
@@ -60,7 +60,7 @@ Since Jobs are atomic, having one thread may block the scheduler from executing 
                         .build();
 ````
 - Define the trigger which will relate freq, basetime and job(s) to be executed.
-PS: trigger can have many jobs, but a job has one trigger
+PS: trigger and job relations ship is many to many.
 ```` 
         Trigger trigger = Trigger
                 .builder()
@@ -78,6 +78,12 @@ PS: trigger can have many jobs, but a job has one trigger
 - kick off scheduler!
 ```` 
  scheduler.start();
+```` 
+
+
+- you can deliberately stop the schedule.
+```` 
+ scheduler.stop();
 ```` 
 
 ### Future Work
